@@ -57,7 +57,7 @@ exports.sanitizers = {
 	posix: str => replaceString(str, '\\', '/'),
 	slow: str => str.replace(/(slow.+?)\(\d+m?s\)/g, '$1 (000ms)'),
 	// TODO: Remove when Node.js 4 support is dropped
-	stacks: str => str.replace(/(\[90m|')t \((.+?\.js:\d+:\d+)\)/g, '$1$2').replace(/Test\.t \[as fn\]/g, 'Test.fn').replace(/null\._onTimeout/g, 'Timeout.setTimeout'),
+	stacks: str => str.replace(/(\[90m|')t \((.+?\.js:\d+:\d+)\)/g, '$1$2').replace(/null\._onTimeout/g, 'Timeout.setTimeout'),
 	// At least in Appveyor with Node.js 6, IPC can overtake stdout/stderr. This
 	// causes the reporter to emit in a different order, resulting in a test
 	// failure. "Fix" by not asserting on the stdout/stderr reporting at all.
