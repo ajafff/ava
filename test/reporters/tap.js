@@ -24,7 +24,7 @@ const run = type => t => {
 			tty.end();
 			return tty.asBuffer();
 		})
-		.then(buffer => report.assert(t, logFile, buffer, true));
+		.then(buffer => report.assert(t, logFile, buffer, {stripStdIO: true, alsoStripSeparator: true}));
 };
 
 test('verbose reporter - regular run', run('regular'));

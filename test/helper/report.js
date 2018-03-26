@@ -31,7 +31,7 @@ exports.captureStdIOReliability = () => {
 	}
 };
 
-exports.assert = (t, logFile, buffer, stripStdIO) => {
+exports.assert = (t, logFile, buffer, stripOptions) => {
 	let existing = null;
 	try {
 		existing = fs.readFileSync(logFile);
@@ -45,8 +45,8 @@ exports.assert = (t, logFile, buffer, stripStdIO) => {
 	// At least in Appveyor with Node.js 6, IPC can overtake stdout/stderr. This
 	// causes the reporter to emit in a different order, resulting in a test
 	// failure. "Fix" by not asserting on the stdout/stderr reporting at all.
-	if (stripStdIO && !hasReliableStdIO) {
-		expected = expected.replace(/(---tty-stream-chunk-separator\n)(stderr|stdout)\n/g, '$1');
+	if (stripOptions.stripStdIO && !hasReliableStdIO) {
+		expected = expected.replace(/(---tty-stream-chunk-separator\n)(stderr|stdout)\n/g, stripOptions.alsoStripSeparator ? '' : '$1');
 	}
 	t.is(buffer.toString('utf8'), expected);
 };
