@@ -4,12 +4,16 @@ require('../lib/chalk').set();
 const path = require('path');
 const fs = require('fs');
 const del = require('del');
-const test = require('tap').test;
+const tap = require('tap');
 const Api = require('../api');
+
+const skip = tap.skip;
+const test = tap.test;
 
 const testCapitalizerPlugin = require.resolve('./fixture/babel-plugin-test-capitalizer');
 
 const ROOT_DIR = path.join(__dirname, '..');
+const isNode4 = /\d+/.exec(process.version)[0] === '4';
 
 function apiCreator(options) {
 	options = options || {};
@@ -935,7 +939,7 @@ if (Number(process.version.split('.')[0].slice(1)) < 8) {
 	generatePassInspectIntegrationTests(['--inspect']);
 }
 
-test('`esm` package support', t => {
+(isNode4 ? skip : test)('`esm` package support', t => {
 	const api = apiCreator({
 		require: [require.resolve('esm')]
 	});
