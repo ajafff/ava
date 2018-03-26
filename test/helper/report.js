@@ -46,7 +46,7 @@ exports.assert = (t, logFile, buffer, stripStdIO) => {
 	// causes the reporter to emit in a different order, resulting in a test
 	// failure. "Fix" by not asserting on the stdout/stderr reporting at all.
 	if (stripStdIO && !hasReliableStdIO) {
-		expected = expected.replace(/---tty-stream-chunk-separator\n(stderr|stdout)\n/g, '');
+		expected = expected.replace(/(---tty-stream-chunk-separator\n)(stderr|stdout)\n/g, '$1');
 	}
 	t.is(buffer.toString('utf8'), expected);
 };
@@ -61,7 +61,10 @@ exports.sanitizers = {
 	// causes the reporter to emit in a different order, resulting in a test
 	// failure. "Fix" by not asserting on the stdout/stderr reporting at all.
 	unreliableProcessIO(str) {
-		return !hasReliableStdIO && (str === 'stdout\n' || str === 'stderr\n') ? '' : str;
+		if (hasReliableStdIO) {
+			return str;
+		}
+		return str === 'stdout\n' || str === 'stderr\n' ? '' : str;
 	}
 };
 
